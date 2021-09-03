@@ -27,7 +27,7 @@ ruta.post('/', async (req, res) =>{
     password = bcrypt.hashSync(password, 10);
 
     // consulta sql
-    await conection.query(`INSERT INTO usuario (NOMBRE, EMAIL, PASSWORD) VALUES('${nombre}', '${email}', '${password}');`, (err, rows) =>{
+    await conection.query(`INSERT INTO usuario (nombre, email, password) VALUES('${nombre}', '${email}', '${password}');`, (err, rows) =>{
         if(err){
             const {sqlMessage: error} = err
             res.status(400).json({msj:'error en la consulta a la base de datos: ', error});

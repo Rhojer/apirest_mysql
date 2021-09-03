@@ -9,7 +9,7 @@ const { env } = require('process');
 // consulta sql
 ruta.post('/', async( req, res) =>{
 
-        await conection.query(`SELECT * FROM usuario WHERE EMAIL = 'rhojer24@gmail.com';`, (err, rows) =>{
+        await conection.query(`SELECT * FROM usuario WHERE email = 'rhojer24@gmail.com';`, (err, rows) =>{
             if(err){
                 const {sqlMessage: error} = err
                 res.status(400).json({msj:'error en la consulta a la base de datos: ', error})
@@ -17,8 +17,8 @@ ruta.post('/', async( req, res) =>{
               conection.end();
             }
             else {
-                let [{ID, NOMBRE, EMAIL, PASSWORD, PROFESOR}] = rows;
-                const token = jwt.sign({datausuario: {id: ID, nombre: NOMBRE, email: EMAIL, password: PASSWORD, profesor: PROFESOR }
+                let [{id, nombre, email, password, rol_id}] = rows;
+                const token = jwt.sign({datausuario: {id: id, nombre: nombre, email: email, password: password, rol: rol_id }
                 },'secret', { expiresIn: '1h' });
                 conection.end();
                 res.json(token);
