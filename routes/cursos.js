@@ -1,9 +1,10 @@
 const express = require('express');
 const ruta = express.Router();
-const validarToken = require('../middleware/auth.js')
+const validarToken = require('../middleware/auth.js');
+const Joi = require('joi');
 const conection = require('../config/conectSQL.js');
 
-ruta.post('/', validarToken, (req, res) =>{
+ruta.post('/crear', validarToken, (req, res) =>{
     const {nombre, descripcion } = req.body;
     conection.query(`SELECT * FROM curso WHERE nombre = '${nombre}'`, (err, rows) =>{
         console.log(rows.length)
@@ -29,7 +30,24 @@ ruta.post('/', validarToken, (req, res) =>{
 
 });
 
-
+ruta.post('/inscribir', validarToken, (req, res) =>{
+    conection.query(`SELECT * FROM curso WHERE id = '${req.body.id}' `, (err, rows) => {
+        let [{id, nombre}] = rows;
+        if(err) return res.status(401).json({msj: 'ocurrio un error:' , err})
+        if(rows.length == 1){
+            conection.query(`INSERT INTO curso_usuario (curso_id, usuario_id) VALUES ('${id}', '${req.usuario.id}')`, (err) =>{
+                if(err){
+                     return res.status(400).json ({msj:'error con el servidor', err})
+                    }else{
+                        res.json({inscripcion: 'ok',
+                        msj: `felicidades ${req.usuario.nombre} se ha registrado satisfactoriamente en el curso: ${nombre}`})
+                    }
+            
+            })
+        }else {res.status(400).json({msj: 'curso inexistente'})}
+    })
+       
+})
 
 
 
@@ -60,5 +78,11 @@ ruta.post('/', validarToken, (req, res) =>{
     };
 
 
-
+    const schema = Joi.object({
+        username: Joi.string()
+            .min(3)
+            .max(30)
+            .required(),
+    
+    })
 module.exports = ruta;
