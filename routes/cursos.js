@@ -5,6 +5,8 @@ const Joi = require('joi');
 const conection = require('../config/conectSQL.js');
 
 ruta.post('/crear', validarToken, (req, res) =>{
+    console.log(req.usuario)
+    if(req.usuario.rol == 1){
     const {nombre, descripcion } = req.body;
     conection.query(`SELECT * FROM curso WHERE nombre = '${nombre}'`, (err, rows) =>{
         console.log(rows.length)
@@ -24,6 +26,11 @@ ruta.post('/crear', validarToken, (req, res) =>{
        }
         
     });
+}else{
+    res.json({
+        msj: 'no tiene los permisos necesarios para crear un curso'
+    });
+}
   /*   if(req.usuario.profesor = true){
         await crearCurso(nombre, descripcion);
     } */

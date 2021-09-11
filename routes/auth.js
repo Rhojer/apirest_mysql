@@ -3,14 +3,14 @@ const jwt = require('jsonwebtoken');
 const ruta = express.Router();
 const bcrypt = require('bcrypt');
 const conection = require('../config/conectSQL.js');
+const fs = require('fs');
+const config = require('config');
 
-const { env } = require('process');
 
 
-
-ruta.post('/', async( req, res) =>{
+ruta.post('/', ( req, res) =>{
                 // consulta sql
-        await conection.query(`SELECT * FROM usuario WHERE email = '${req.body.email}';`, (err, rows) =>{
+        conection.query(`SELECT * FROM usuario WHERE email = '${req.body.email}';`, (err, rows) =>{
             if(err){
                 const {sqlMessage: error} = err
                 res.status(400).json({msj:'error en la consulta a la base de datos: ', error})
@@ -28,10 +28,16 @@ ruta.post('/', async( req, res) =>{
                 }
                 else{
                     //creando el token de acceso:
-                const token = jwt.sign({datausuario: {id: id, nombre: nombre, email: email, password: password, rol: rol_id }
-                },'secret', { expiresIn: '1h' });
+                let token = jwt.sign({datausuario: {id: id, nombre: nombre, email: email, password: password, rol: rol_id }
+                },config.set('configToken.SEED'), { expiresIn: config.set('configToken.expiration') });
                 conection.end();
-                res.json(token);
+                let algo = token
+                fs.writeFile('config/token.txt',algo , (error) =>{
+                    if(error) throw error;
+                    return res.json({
+                        msj: 'usuario conectado correctamente'
+                    })
+                })
                 }
             }
 
