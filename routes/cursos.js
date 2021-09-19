@@ -2,11 +2,7 @@ const express = require('express');
 const ruta = express.Router();
 const validarToken = require('../middleware/auth.js');
 const Joi = require('joi');
-<<<<<<< HEAD
 const pool = require('../config/conectSQL.js');
-=======
-const conection = require('../config/conectSQL.js');
->>>>>>> dcffd4a92ecff2642bda0de74b96be1ffacec6be
 
 ruta.post('/crear', validarToken, (req, res) =>{
     console.log(req.usuario)
@@ -41,7 +37,6 @@ ruta.post('/crear', validarToken, (req, res) =>{
 });
 
 ruta.post('/inscribir', validarToken, (req, res) =>{
-<<<<<<< HEAD
     pool.query(`SELECT * FROM curso_usuario WHERE curso_id = '${req.body.id}' `, (err, rows) =>{ 
         let [{usuario_id}] = rows;
         if(usuario_id == req.usuario.id){
@@ -66,24 +61,6 @@ ruta.post('/inscribir', validarToken, (req, res) =>{
         })
        }
     })
-=======
-    conection.query(`SELECT * FROM curso WHERE id = '${req.body.id}' `, (err, rows) => {
-        let [{id, nombre}] = rows;
-        if(err) return res.status(401).json({msj: 'ocurrio un error:' , err})
-        if(rows.length == 1){
-            conection.query(`INSERT INTO curso_usuario (curso_id, usuario_id) VALUES ('${id}', '${req.usuario.id}')`, (err) =>{
-                if(err){
-                     return res.status(400).json ({msj:'error con el servidor', err})
-                    }else{
-                        res.json({inscripcion: 'ok',
-                        msj: `felicidades ${req.usuario.nombre} se ha registrado satisfactoriamente en el curso: ${nombre}`})
-                    }
-            
-            })
-        }else {res.status(400).json({msj: 'curso inexistente'})}
-    })
-       
->>>>>>> dcffd4a92ecff2642bda0de74b96be1ffacec6be
 })
 
 
