@@ -1,0 +1,7 @@
+{
+    "nombre":"apiREST con MYSQL",
+    "configToken":{
+        "SEED": "secret",
+        "expiration": "1h"
+    }
+}

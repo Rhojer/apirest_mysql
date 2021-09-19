@@ -1,6 +1,13 @@
 const mysql = require('mysql');
 
-const conexion = mysql.createConnection({
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    host            : 'localhost',
+    user            : 'root',
+    password        : 'root',
+    database        : 'first_apirest'
+  });
+/* const conexion = mysql.createConnection({
     host : 'localhost',
     database : 'first_apirest',
     user : 'root',
@@ -14,6 +21,6 @@ conexion.connect((err) => {
     }
     console.log('Conectado con el identificador ' + conexion.threadId);
 });
+ */
 
-
-module.exports = conexion;
+module.exports = pool;

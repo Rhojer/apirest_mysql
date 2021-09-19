@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const ruta = express.Router();
-const conection = require('../config/conectSQL.js');
+const pool = require('../config/conectSQL.js');
 
 
 ruta.get('/', (req,res) =>{
@@ -27,14 +27,14 @@ ruta.post('/', async (req, res) =>{
     password = bcrypt.hashSync(password, 10);
 
     // consulta sql
-    await conection.query(`INSERT INTO usuario (nombre, email, password) VALUES('${nombre}', '${email}', '${password}');`, (err, rows) =>{
+    await pool.query(`INSERT INTO usuario (nombre, email, password) VALUES('${nombre}', '${email}', '${password}');`, (err, rows) =>{
         if(err){
             const {sqlMessage: error} = err
             res.status(400).json({msj:'error en la consulta a la base de datos: ', error});
-            conection.end();
+            pool.end();
         }
         else res.json({msj: 'usuario creado satisfactoriamente'});
-        conection.end();
+        pool.end();
     })
  
 
