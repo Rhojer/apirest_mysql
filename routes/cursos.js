@@ -41,7 +41,7 @@ ruta.post('/inscribir', validarToken, (req, res) =>{
         let [{usuario_id}] = rows;
         if(usuario_id == req.usuario.id){
             res.json({
-                error:'curso previamente inscrito'
+                error:'curso previamente inscrito.'
             })
         }else{
         pool.query(`SELECT * FROM curso WHERE id = '${req.body.id}' `, (err, rows) => {

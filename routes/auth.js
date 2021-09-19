@@ -6,7 +6,7 @@ const pool = require('../config/conectSQL.js');
 const fs = require('fs');
 const config = require('config');
 
-
+ 
 
 ruta.post('/', ( req, res) =>{
                 // consulta sql

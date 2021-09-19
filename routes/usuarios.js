@@ -22,7 +22,7 @@ ruta.post('/', async (req, res) =>{
         })
         return;
     }
-
+ 
     //encriptar password
     password = bcrypt.hashSync(password, 10);
 

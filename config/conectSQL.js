@@ -13,7 +13,7 @@ var pool  = mysql.createPool({
     user : 'root',
     password : 'root'
 });
-
+ 
 conexion.connect((err) => {
     if (err) {
         console.error('Error de conexion: ' + err.stack);
